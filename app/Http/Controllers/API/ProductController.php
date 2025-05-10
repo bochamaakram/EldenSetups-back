@@ -26,6 +26,7 @@ class ProductController extends Controller
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
+            'rating' => 'integer|min:0',
         ]);
 
         $product = Product::create($request->all());
