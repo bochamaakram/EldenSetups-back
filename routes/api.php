@@ -104,9 +104,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     ]);
 });
 
-
+Route::middleware(['api'])->group(function () {
+    // Public endpoints
+    Route::post('/contact', [ContactController::class, 'store']);
+    
+    // Protected endpoints (require authentication)
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/contact', [ContactController::class, 'index']);
         Route::get('/contact/{id}', [ContactController::class, 'show']);
         Route::put('/contact/{id}', [ContactController::class, 'update']);
         Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
         Route::patch('/contact/{id}/read', [ContactController::class, 'markAsRead']);
+    });
+});
