@@ -12,6 +12,7 @@ use App\Http\Controllers\API\CartItemController;
 use App\Http\Controllers\API\DeliveryController;
 use App\Http\Controllers\API\DeliveryItemController;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -96,3 +97,16 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return response()->json([
+        'user' => $request->user(),
+        'token' => $request->bearerToken()
+    ]);
+});
+
+
+        Route::get('/contact', [ContactController::class, 'index']);
+        Route::get('/contact/{id}', [ContactController::class, 'show']);
+        Route::put('/contact/{id}', [ContactController::class, 'update']);
+        Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
+        Route::patch('/contact/{id}/read', [ContactController::class, 'markAsRead']);
