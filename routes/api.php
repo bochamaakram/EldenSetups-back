@@ -46,7 +46,7 @@ Route::get('/carts', [CartController::class, 'index']);
 Route::get('/carts/{id}', [CartController::class, 'show']);
 
 Route::get('/cart-items', [CartItemController::class, 'index']);
-Route::get('/cart-items/{id}', [CartItemController::class, 'show']);
+Route::post('/cart-items', [CartItemController::class, 'store']);
 
 Route::get('/deliveries', [DeliveryController::class, 'index']);
 Route::get('/deliveries/{id}', [DeliveryController::class, 'show']);
@@ -81,7 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/carts/{id}', [CartController::class, 'destroy']);
 
     Route::post('/cart-items', [CartItemController::class, 'store']);
-    Route::put('/cart-items/{id}', [CartItemController::class, 'update']);
+    Route::get('/cart-items', [CartItemController::class, 'index']);
     Route::delete('/cart-items/{id}', [CartItemController::class, 'destroy']);
 
     Route::post('/deliveries', [DeliveryController::class, 'store']);

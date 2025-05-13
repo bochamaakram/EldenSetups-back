@@ -1,46 +1,34 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\CartItem;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CartItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(CartItem::with(['cart', 'product'])->get());
-    }
-
-    public function show($id)
-    {
-        return response()->json(CartItem::with(['cart', 'product'])->findOrFail($id));
+        $user = Auth::user();
+        return CartItem::where('user_id', $user->id)->get();
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'cart_id' => 'required|exists:carts,id',
+        $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric',
+            'name' => 'required|string',
+            'image' => 'nullable|string',
         ]);
 
-        $cartItem = CartItem::create($request->all());
+        $data['user_id'] = Auth::id();
+
+        $cartItem = CartItem::create($data);
+
         return response()->json($cartItem, 201);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $cartItem = CartItem::findOrFail($id);
-        $cartItem->update($request->all());
-        return response()->json($cartItem);
-    }
-
-    public function destroy($id)
-    {
-        CartItem::findOrFail($id)->delete();
-        return response()->json(null, 204);
     }
 }
